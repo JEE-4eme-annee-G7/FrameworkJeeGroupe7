@@ -1,7 +1,6 @@
 package com.esgi.framework_JEE.user.Domain.repository;
 
 import com.esgi.framework_JEE.user.Domain.entities.User;
-import com.esgi.framework_JEE.user.Domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
