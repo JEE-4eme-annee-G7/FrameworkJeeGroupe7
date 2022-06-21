@@ -1,5 +1,6 @@
 package com.esgi.framework_JEE.product_category.web.controller;
 
+import com.esgi.framework_JEE.TokenFixture;
 import com.esgi.framework_JEE.product_category.web.request.ProductCategoryRequest;
 import com.esgi.framework_JEE.product_category.web.response.ProductCategoryResponse;
 import io.restassured.RestAssured;
@@ -30,6 +31,8 @@ public class ProductCategoryControllerTest {
 
     @Test
     public void should_create_get_update_and_delete_product_category(){
+        var adminToken = TokenFixture.adminToken();
+        var userToken = TokenFixture.userToken();
 
         var productCategoryRequest = new ProductCategoryRequest();
         productCategoryRequest.name="name";
@@ -37,7 +40,11 @@ public class ProductCategoryControllerTest {
         /*
          * create
          */
-        var productCategoryResponse = ProductCategoryFixtures.create(productCategoryRequest)
+        ProductCategoryFixtures.create(productCategoryRequest, userToken)
+                .then()
+                .statusCode(403);
+
+        var productCategoryResponse = ProductCategoryFixtures.create(productCategoryRequest, adminToken)
                 .then()
                 .statusCode(201)
                 .extract().body().jsonPath().getObject(".", ProductCategoryResponse.class);
@@ -51,7 +58,7 @@ public class ProductCategoryControllerTest {
         /*
          * get by id
          */
-        var getProductCategoryResponse = ProductCategoryFixtures.getById(id)
+        var getProductCategoryResponse = ProductCategoryFixtures.getById(id,userToken)
                 .then()
                 .statusCode(200)
                 .extract().body().jsonPath().getObject(".", ProductCategoryResponse.class);
@@ -65,7 +72,7 @@ public class ProductCategoryControllerTest {
          * update (change name)
          */
         productCategoryRequest.name = "newName";
-        var updatedProductCategoryResponse = ProductCategoryFixtures.changeProductCategoryName(id,productCategoryRequest)
+        var updatedProductCategoryResponse = ProductCategoryFixtures.changeProductCategoryName(id,productCategoryRequest,adminToken)
                 .then()
                 .statusCode(200)
                 .extract().body().jsonPath().getObject(".", ProductCategoryResponse.class);
@@ -77,7 +84,7 @@ public class ProductCategoryControllerTest {
         /*
          * delete
          */
-        var deleteProductCategoryResponse = ProductCategoryFixtures.deleteById(id)
+        var deleteProductCategoryResponse = ProductCategoryFixtures.deleteById(id,adminToken)
                 .then()
                 .statusCode(200)
                 .extract().body().asString();
@@ -85,7 +92,7 @@ public class ProductCategoryControllerTest {
 
         assertThat(deleteProductCategoryResponse).isEqualTo("ProductCategory " + id + " deleted");
 
-        deleteProductCategoryResponse = ProductCategoryFixtures.deleteById(id)
+        deleteProductCategoryResponse = ProductCategoryFixtures.deleteById(id, adminToken)
                 .then()
                 .statusCode(400)
                 .extract().body().asString();
@@ -99,7 +106,9 @@ public class ProductCategoryControllerTest {
         var request = new ProductCategoryRequest();
         request.name = "";
 
-        var response = ProductCategoryFixtures.create(request)
+        var adminToken = TokenFixture.adminToken();
+
+        var response = ProductCategoryFixtures.create(request, adminToken)
                 .then()
                 .statusCode(400)
                 .extract().body().asString();
@@ -108,14 +117,14 @@ public class ProductCategoryControllerTest {
         /*
          * get by id
          */
-        var response2 = ProductCategoryFixtures.getById(0)
+        var response2 = ProductCategoryFixtures.getById(0, adminToken)
                 .then()
                 .statusCode(400)
                 .extract().body().asString();
 
         assertThat(response2).isEqualTo("");
 
-        var response3 = ProductCategoryFixtures.changeProductCategoryName(0,new ProductCategoryRequest())
+        var response3 = ProductCategoryFixtures.changeProductCategoryName(0,new ProductCategoryRequest(), adminToken)
                 .then()
                 .statusCode(400)
                 .extract().body().asString();
@@ -129,19 +138,22 @@ public class ProductCategoryControllerTest {
         var request = new ProductCategoryRequest();
         request.name = "name";
 
-        ProductCategoryFixtures.create(request)
+        var userToken = TokenFixture.userToken();
+        var adminToken = TokenFixture.adminToken();
+
+        ProductCategoryFixtures.create(request, adminToken)
                 .then()
                 .statusCode(201)
                 .extract().body().jsonPath().getObject(".", ProductCategoryResponse.class);
 
         request.name = "name2";
 
-        ProductCategoryFixtures.create(request)
+        ProductCategoryFixtures.create(request, adminToken)
                 .then()
                 .statusCode(201)
                 .extract().body().jsonPath().getObject(".", ProductCategoryResponse.class);
 
-        var slotResponse = ProductCategoryFixtures.getAll()
+        var slotResponse = ProductCategoryFixtures.getAll(userToken)
                 .then()
                 .statusCode(200)
                 .extract().body().jsonPath().getList(".", ProductCategoryResponse.class);
