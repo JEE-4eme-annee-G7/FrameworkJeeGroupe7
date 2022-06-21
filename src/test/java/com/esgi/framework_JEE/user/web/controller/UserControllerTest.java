@@ -211,8 +211,6 @@ class UserControllerTest {
 
     }
 
-
-
     @Test
     public void should_test_get_by_email(){
         var created = UserFixture.create(user3)
