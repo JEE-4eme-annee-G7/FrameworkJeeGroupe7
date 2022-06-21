@@ -1,13 +1,7 @@
 package com.esgi.framework_JEE.invoice;
 
-
-import com.esgi.framework_JEE.TestFixtures;
 import com.esgi.framework_JEE.TokenFixture;
 import com.esgi.framework_JEE.invoice.domain.Invoice;
-import com.esgi.framework_JEE.invoice.infrastructure.web.response.InvoiceResponse;
-import com.esgi.framework_JEE.user.Domain.entities.User;
-import com.esgi.framework_JEE.user.web.controller.UserFixture;
-import com.esgi.framework_JEE.user.web.request.UserRequest;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -21,7 +15,6 @@ import org.springframework.boot.web.server.LocalServerPort;
 import java.util.*;
 
 import static io.restassured.RestAssured.*;
-import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
