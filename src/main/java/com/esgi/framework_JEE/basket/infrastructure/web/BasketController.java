@@ -2,6 +2,9 @@ package com.esgi.framework_JEE.basket.infrastructure.web;
 
 
 
+import com.esgi.framework_JEE.basket.paiment.PaymentRequest;
+import com.esgi.framework_JEE.basket.paiment.mapper.BuyerMapper;
+import com.esgi.framework_JEE.basket.paiment.mapper.PaymentMapper;
 import com.esgi.framework_JEE.basket.infrastructure.web.response.BasketResponse;
 import com.esgi.framework_JEE.basket.domain.Basket;
 import com.esgi.framework_JEE.basket.domain.BasketService;
@@ -13,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,10 +31,14 @@ public class BasketController {
 
     private final BasketService basketService;
     private final UserQuery userQuery;
+    private final BuyerMapper buyerMapper;
+    private final PaymentMapper paymentMapper;
 
-    public BasketController(BasketService basketService, UserQuery userQuery) {
+    public BasketController(BasketService basketService, UserQuery userQuery, BuyerMapper buyerMapper, PaymentMapper paymentMapper) {
         this.basketService = basketService;
         this.userQuery = userQuery;
+        this.buyerMapper = buyerMapper;
+        this.paymentMapper = paymentMapper;
     }
 
     @PostMapping
@@ -112,6 +121,34 @@ public class BasketController {
 
         return new ResponseEntity<>("Basket deleted", HttpStatus.OK);
     }
+
+
+    @PostMapping("/payment")
+    public ResponseEntity<?> paid(@RequestBody PaymentRequest paymentRequest){
+
+
+        //Convertir le user en buyer
+        var payment = paymentMapper.toPayment(paymentRequest);
+        payment.setBuyer(buyerMapper.toBuyer(paymentRequest.getUser()));
+        payment.setAmount(12.5); //TODO : Aller chercher le basket du user,
+                                    //      les produits associé et calculer le total
+
+
+        try{
+            URI uri = URI.create("http://localhost:8090/payment");
+            var restTemplate = new RestTemplate();
+
+            ResponseEntity<?> paymentResult = restTemplate.postForEntity(uri, payment, String.class);
+
+            return new ResponseEntity<>(paymentResult.getBody(), paymentResult.getStatusCode());
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("Payment Refused ! Please check your information and retry with the same checkout_id", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 
     
     private BasketResponse toResponse(Basket basket){
