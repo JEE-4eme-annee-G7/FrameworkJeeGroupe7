@@ -130,8 +130,9 @@ public class BasketController {
         //Convertir le user en buyer
         var payment = paymentMapper.toPayment(paymentRequest);
         payment.setBuyer(buyerMapper.toBuyer(paymentRequest.getUser()));
-        payment.setAmount(12.5); //TODO : Aller chercher le basket du user,
-                                    //      les produits associé et calculer le total
+        payment.setAmount(12.5); //TODO : * Ajouter un champs amount dans le basket
+                                 //       * Aller chercher le basket du user,
+
 
 
         try{
@@ -139,6 +140,9 @@ public class BasketController {
             var restTemplate = new RestTemplate();
 
             ResponseEntity<?> paymentResult = restTemplate.postForEntity(uri, payment, String.class);
+
+            //TODO : Si le paiement est accépté [if(paymentResult.getStatusCode() == 202)]
+            //          Générer la facture
 
             return new ResponseEntity<>(paymentResult.getBody(), paymentResult.getStatusCode());
 
