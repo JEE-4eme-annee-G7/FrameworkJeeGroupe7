@@ -89,9 +89,13 @@ public class BasketService {
         return getById(basket.getId());
     }
 
-
     public List<Product> getProductFromBasketId(int basket_id){
         return productQuery.getProductsByBasketId(basket_id);
+    }
+
+    public void deleteProductFromBasket(int basket_id, Product product){
+        product.setBasket(null);
+        productCommand.saveProduct(product);
     }
 
 
