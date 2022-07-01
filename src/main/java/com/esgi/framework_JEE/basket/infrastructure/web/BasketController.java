@@ -8,6 +8,7 @@ import com.esgi.framework_JEE.basket.paiment.mapper.PaymentMapper;
 import com.esgi.framework_JEE.basket.infrastructure.web.response.BasketResponse;
 import com.esgi.framework_JEE.basket.domain.Basket;
 import com.esgi.framework_JEE.basket.domain.BasketService;
+import com.esgi.framework_JEE.product.web.query.ProductQuery;
 import com.esgi.framework_JEE.user.query.UserQuery;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,12 +34,14 @@ public class BasketController {
     private final UserQuery userQuery;
     private final BuyerMapper buyerMapper;
     private final PaymentMapper paymentMapper;
+    private final ProductQuery productQuery;
 
-    public BasketController(BasketService basketService, UserQuery userQuery, BuyerMapper buyerMapper, PaymentMapper paymentMapper) {
+    public BasketController(BasketService basketService, UserQuery userQuery, BuyerMapper buyerMapper, PaymentMapper paymentMapper, ProductQuery productQuery) {
         this.basketService = basketService;
         this.userQuery = userQuery;
         this.buyerMapper = buyerMapper;
         this.paymentMapper = paymentMapper;
+        this.productQuery = productQuery;
     }
 
     @PostMapping
@@ -132,7 +135,7 @@ public class BasketController {
 
         var userBasket = basketService.getByUserId(user.getId());
         if (userBasket == null){
-            return new ResponseEntity<>(user.getFirstname() + "Don't have any basket", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(user.getFirstname() + "don't have any basket", HttpStatus.NOT_FOUND);
         }
 
         basketService.deleteByUser(user.getId());
@@ -140,6 +143,25 @@ public class BasketController {
         return new ResponseEntity<>("Basket deleted", HttpStatus.OK);
     }
 
+
+    @PutMapping("/{user_id}")
+    public ResponseEntity<?> addProduct(@PathVariable int user_id, @RequestBody List<Integer> productIdList){
+        var user = userQuery.getById(user_id);
+        if(user == null) return new ResponseEntity<>(" User not found", HttpStatus.NOT_FOUND);
+
+        var basket = basketService.getByUserId(user.getId());
+        if(basket == null) return new ResponseEntity<>(user.getFirstname() + "don't have any basket", HttpStatus.NOT_FOUND);
+
+        for (Integer productId: productIdList) {
+            if (productQuery.getProduct(productId) == null) {
+                return new ResponseEntity<>("Product " + productId + "not found", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        var basketUpdated = basketService.addProducts(basket, productIdList);
+
+        return new ResponseEntity<>(toResponse(basketUpdated), HttpStatus.OK);
+    }
 
 
     @PostMapping("/payment")
@@ -149,8 +171,7 @@ public class BasketController {
         //Convertir le user en buyer
         var payment = paymentMapper.toPayment(paymentRequest);
         payment.setBuyer(buyerMapper.toBuyer(paymentRequest.getUser()));
-        payment.setAmount(12.5); //TODO : * Ajouter un champs amount dans le basket
-                                 //       * Aller chercher le basket du user,
+        payment.setAmount(12.5); //TODO : * Aller chercher le basket du user,
 
 
 
