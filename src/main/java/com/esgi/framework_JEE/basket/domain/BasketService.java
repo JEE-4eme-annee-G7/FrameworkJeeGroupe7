@@ -93,7 +93,7 @@ public class BasketService {
         return productQuery.getProductsByBasketId(basket_id);
     }
 
-    public void deleteProductFromBasket(int basket_id, Product product){
+    public void removeProductFromBasket(int basket_id, Product product){
         product.setBasket(null);
         productCommand.saveProduct(product);
     }

@@ -174,7 +174,7 @@ public class BasketController {
         return new ResponseEntity<>(basketResponse, HttpStatus.FOUND);
     }
 
-    
+
     @PatchMapping("/{basket_id}/product/{product_id}")
     public ResponseEntity<String> deleteProduct(@PathVariable int basket_id, @PathVariable int product_id){
         var basket = basketService.getById(basket_id);
@@ -183,7 +183,11 @@ public class BasketController {
         var product = productQuery.getProduct(product_id);
         if(product == null) return new ResponseEntity<>(" Basket not found", HttpStatus.NOT_FOUND);
 
-        basketService.deleteProductFromBasket(basket.getId(), product);
+        if(product.getBasket() == null ||product.getBasket().getId() != basket.getId()) {
+            return new ResponseEntity<>("Product is not in this basket", HttpStatus.FORBIDDEN);
+        }
+
+        basketService.removeProductFromBasket(basket.getId(), product);
 
         return new ResponseEntity<>("Product remove from basket", HttpStatus.OK);
     }
