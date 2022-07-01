@@ -123,6 +123,25 @@ public class BasketController {
     }
 
 
+    @DeleteMapping("/userId/{user_id}")
+    public ResponseEntity<String> deleteByUserId(@PathVariable int user_id){
+        var user = userQuery.getById(user_id);
+        if(user == null){
+            return new ResponseEntity<>(" User not found", HttpStatus.NOT_FOUND);
+        }
+
+        var userBasket = basketService.getByUserId(user.getId());
+        if (userBasket == null){
+            return new ResponseEntity<>(user.getFirstname() + "Don't have any basket", HttpStatus.NOT_FOUND);
+        }
+
+        basketService.deleteByUser(user.getId());
+
+        return new ResponseEntity<>("Basket deleted", HttpStatus.OK);
+    }
+
+
+
     @PostMapping("/payment")
     public ResponseEntity<?> paid(@RequestBody PaymentRequest paymentRequest){
 
@@ -159,6 +178,7 @@ public class BasketController {
         return new BasketResponse()
                 .setUserId(
                         basket.getUser() == null ? 0 : basket.getUser().getId()
-                );
+                )
+                .setAmount(basket.getAmount());
     }
 }
