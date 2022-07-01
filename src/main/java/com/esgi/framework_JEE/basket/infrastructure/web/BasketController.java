@@ -164,6 +164,21 @@ public class BasketController {
     }
 
 
+    @GetMapping("/{basket_id}/products")
+    public ResponseEntity<?> getProductInBasket(@PathVariable int basket_id){
+        var basket = basketService.getById(basket_id);
+        if(basket == null) return new ResponseEntity<>(" Basket not found", HttpStatus.NOT_FOUND);
+
+        var basketResponse = basketService.getProductFromBasketId(basket.getId());
+
+        return new ResponseEntity<>(basketResponse, HttpStatus.FOUND);
+    }
+
+
+
+    //TODO : Supprimer un produit du panier
+
+
     @PostMapping("/payment")
     public ResponseEntity<?> paid(@RequestBody PaymentRequest paymentRequest){
 
@@ -183,6 +198,7 @@ public class BasketController {
 
             //TODO : Si le paiement est accépté [if(paymentResult.getStatusCode() == 202)]
             //          Générer la facture
+            //          Supprimer le panier
 
             return new ResponseEntity<>(paymentResult.getBody(), paymentResult.getStatusCode());
 

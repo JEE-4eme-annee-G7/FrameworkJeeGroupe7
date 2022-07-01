@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class BasketService {
@@ -70,14 +71,30 @@ public class BasketService {
     public Basket addProducts(Basket basket, List<Integer> productIdList){
         var products = new ArrayList<Product>();
 
+        AtomicReference<Double> basketAmount = new AtomicReference<>(basket.getAmount());
+
+        //TODO : Vérifier que le produit n'est pas déjà dans le panier
+
         productIdList.forEach(id -> products.add(productQuery.getProduct(id)));
         products.forEach(product -> {
             product.setBasket(basket);
             productCommand.saveProduct(product);
+            basketAmount.updateAndGet(amount -> amount + product.getPrice());
         });
+
+
+        basket.setAmount(basketAmount.get());
+        basketRepository.save(basket);
 
         return getById(basket.getId());
     }
+
+
+    public List<Product> getProductFromBasketId(int basket_id){
+        return productQuery.getProductsByBasketId(basket_id);
+    }
+
+
 
 
 }
