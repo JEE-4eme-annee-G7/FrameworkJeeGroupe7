@@ -1,21 +1,11 @@
 package com.esgi.framework_JEE.basket.paiment;
 
 public class UserPaymentRequest {
-    private int id;
     private String email;
     private String firstname;
     private String lastname;
     private CreditCard creditCard;
 
-
-    public int getId() {
-        return id;
-    }
-
-    public UserPaymentRequest setId(int id) {
-        this.id = id;
-        return this;
-    }
 
     public String getEmail() {
         return email;

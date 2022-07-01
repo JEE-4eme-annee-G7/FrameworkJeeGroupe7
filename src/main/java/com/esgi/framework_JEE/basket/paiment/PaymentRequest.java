@@ -4,8 +4,11 @@ import java.util.UUID;
 
 public class PaymentRequest {
 
-    private UserPaymentRequest user;
+    private int user_id;
+    //private UserPaymentRequest user;
     private String checkout_id;
+
+    private CreditCard creditCard;
 
 
     public PaymentRequest newUUID(){
@@ -13,13 +16,12 @@ public class PaymentRequest {
         return this;
     }
 
-
-    public UserPaymentRequest getUser() {
-        return user;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public PaymentRequest setUser(UserPaymentRequest user) {
-        this.user = user;
+    public PaymentRequest setUser_id(int user_id) {
+        this.user_id = user_id;
         return this;
     }
 
@@ -32,5 +34,13 @@ public class PaymentRequest {
         return this;
     }
 
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public PaymentRequest setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
+        return this;
+    }
 }
 

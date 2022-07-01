@@ -196,12 +196,21 @@ public class BasketController {
     @PostMapping("/payment")
     public ResponseEntity<?> paid(@RequestBody PaymentRequest paymentRequest){
 
+        //Retrouver les infos du user a partir de paymentRequest
+        var user = userQuery.getById(paymentRequest.getUser_id());
+        if(user == null) return new ResponseEntity<>(" User not found", HttpStatus.NOT_FOUND);
+
+
+        var payment = paymentMapper.toPayment(paymentRequest);
 
         //Convertir le user en buyer
-        var payment = paymentMapper.toPayment(paymentRequest);
-        payment.setBuyer(buyerMapper.toBuyer(paymentRequest.getUser()));
-        payment.setAmount(12.5); //TODO : * Aller chercher le basket du user,
+        payment.setBuyer(buyerMapper.userToBuyer(user, paymentRequest.getCreditCard()));
 
+        //Aller chercher le basket du user
+        var userBasket = basketService.getByUserId(user.getId());
+
+        //Mettre à jour le montant
+        payment.setAmount(userBasket.getAmount());
 
 
         try{
