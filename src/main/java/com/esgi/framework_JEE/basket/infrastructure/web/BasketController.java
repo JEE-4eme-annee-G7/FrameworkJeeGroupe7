@@ -184,13 +184,13 @@ public class BasketController {
         if(basket == null) return new ResponseEntity<>(" Basket not found", HttpStatus.NOT_FOUND);
 
         var product = productQuery.getProduct(product_id);
-        if(product == null) return new ResponseEntity<>(" Basket not found", HttpStatus.NOT_FOUND);
+        if(product == null) return new ResponseEntity<>("Product not found", HttpStatus.NOT_FOUND);
 
         if(product.getBasket() == null ||product.getBasket().getId() != basket.getId()) {
             return new ResponseEntity<>("Product is not in this basket", HttpStatus.FORBIDDEN);
         }
 
-        basketService.removeProductFromBasket(basket.getId(), product);
+        basketService.removeProductFromBasket(basket, product);
 
         return new ResponseEntity<>("Product remove from basket", HttpStatus.OK);
     }

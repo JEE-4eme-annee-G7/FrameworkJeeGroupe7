@@ -100,9 +100,12 @@ public class BasketService {
         return productQuery.getProductsByBasketId(basket_id);
     }
 
-    public void removeProductFromBasket(int basket_id, Product product){
+    public void removeProductFromBasket(Basket basket, Product product){
         product.setBasket(null);
         productCommand.saveProduct(product);
+
+        basket.setAmount(basket.getAmount() - product.getPrice());
+        basketRepository.save(basket);
     }
 
 
