@@ -63,8 +63,15 @@ public class BasketService {
     @Transactional
     public void deleteByUser(int user_id){
         var basket = getByUserId(user_id);
+
+        var products = productQuery.getProductsByBasketId(basket.getId());
+        products.forEach(product -> {
+            product.setBasket(null);
+            productCommand.saveProduct(product);
+        });
+
         basket.setUser(null);
-        basket.setAmount(null);
+        basketRepository.save(basket);
         basketRepository.delete(basket);
     }
 

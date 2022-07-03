@@ -8,6 +8,7 @@ import com.esgi.framework_JEE.basket.paiment.mapper.PaymentMapper;
 import com.esgi.framework_JEE.basket.infrastructure.web.response.BasketResponse;
 import com.esgi.framework_JEE.basket.domain.Basket;
 import com.esgi.framework_JEE.basket.domain.BasketService;
+import com.esgi.framework_JEE.invoice.domain.InvoiceService;
 import com.esgi.framework_JEE.product.web.query.ProductQuery;
 import com.esgi.framework_JEE.user.query.UserQuery;
 import org.springframework.http.ResponseEntity;
@@ -35,13 +36,15 @@ public class BasketController {
     private final BuyerMapper buyerMapper;
     private final PaymentMapper paymentMapper;
     private final ProductQuery productQuery;
+    private final InvoiceService invoiceService;
 
-    public BasketController(BasketService basketService, UserQuery userQuery, BuyerMapper buyerMapper, PaymentMapper paymentMapper, ProductQuery productQuery) {
+    public BasketController(BasketService basketService, UserQuery userQuery, BuyerMapper buyerMapper, PaymentMapper paymentMapper, ProductQuery productQuery, InvoiceService invoiceService) {
         this.basketService = basketService;
         this.userQuery = userQuery;
         this.buyerMapper = buyerMapper;
         this.paymentMapper = paymentMapper;
         this.productQuery = productQuery;
+        this.invoiceService = invoiceService;
     }
 
     @PostMapping
@@ -91,12 +94,12 @@ public class BasketController {
     public ResponseEntity<?> getByUserId(@PathVariable int id){
         var user = userQuery.getById(id);
         if(user == null){
-            return new ResponseEntity<>(" User not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
 
         var basket = basketService.getByUserId(user.getId());
         if(basket == null){
-            return new ResponseEntity<>(" Basket not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Basket not found", HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(toResponse(basket), HttpStatus.FOUND);
@@ -200,18 +203,13 @@ public class BasketController {
         var user = userQuery.getById(paymentRequest.getUser_id());
         if(user == null) return new ResponseEntity<>(" User not found", HttpStatus.NOT_FOUND);
 
-
         var payment = paymentMapper.toPayment(paymentRequest);
-
         //Convertir le user en buyer
         payment.setBuyer(buyerMapper.userToBuyer(user, paymentRequest.getCreditCard()));
-
         //Aller chercher le basket du user
         var userBasket = basketService.getByUserId(user.getId());
-
         //Mettre à jour le montant
         payment.setAmount(userBasket.getAmount());
-
 
         try{
             URI uri = URI.create("http://localhost:8090/payment");
@@ -219,10 +217,10 @@ public class BasketController {
 
             ResponseEntity<?> paymentResult = restTemplate.postForEntity(uri, payment, String.class);
 
-            //TODO : Si le paiement est accépté [if(paymentResult.getStatusCode() == 202)]
-            //          Générer la facture
-            //          Supprimer le panier
-
+            if(paymentResult.getStatusCodeValue() == 202){
+                invoiceService.generateWithUser(user, userBasket);
+                basketService.deleteByUser(user.getId());
+            }
             return new ResponseEntity<>(paymentResult.getBody(), paymentResult.getStatusCode());
 
         }catch (Exception e){
@@ -232,8 +230,6 @@ public class BasketController {
     }
 
 
-
-    
     private BasketResponse toResponse(Basket basket){
         return new BasketResponse()
                 .setUserId(

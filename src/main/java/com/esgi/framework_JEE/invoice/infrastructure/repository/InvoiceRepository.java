@@ -12,4 +12,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
     Invoice getInvoiceById(int id);
 
     List<Invoice> getInvoicesByUser(User user);
+
+    void deleteAllByUser(User user);
 }

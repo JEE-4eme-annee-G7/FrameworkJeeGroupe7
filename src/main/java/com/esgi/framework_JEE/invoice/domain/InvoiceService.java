@@ -1,8 +1,10 @@
 package com.esgi.framework_JEE.invoice.domain;
 
+import com.esgi.framework_JEE.basket.domain.Basket;
 import com.esgi.framework_JEE.invoice.infrastructure.repository.InvoiceRepository;
 import com.esgi.framework_JEE.user.Domain.entities.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -25,9 +27,9 @@ public class InvoiceService {
         return invoice;
     }
 
-    public Invoice generateWithUser(User user){
+    public Invoice generateWithUser(User user, Basket basket){
         var invoice = new Invoice()
-                .setAmount(0.0)
+                .setAmount(basket.getAmount())
                 .setCreationDate(new Date())
                 .setUser(user);
 
@@ -39,7 +41,7 @@ public class InvoiceService {
         return invoiceRepository.getInvoiceById(id);
     }
 
-    public List<Invoice> getByUserId(User user){
+    public List<Invoice> getByUser(User user){
         return invoiceRepository.getInvoicesByUser(user);
     }
 
@@ -47,7 +49,18 @@ public class InvoiceService {
         return invoiceRepository.findAll();
     }
 
-    public void delete(int id){
+    public void deleteById(int id){
+        var invoice = getById(id);
+        invoice.setUser(null);
         invoiceRepository.deleteById(id);
+    }
+
+    public void deleteByUser(User user){
+        var invoices = getByUser(user);
+        invoices.forEach(invoice -> {
+            invoice.setUser(null);
+            invoiceRepository.save(invoice);
+            invoiceRepository.delete(invoice);
+        });
     }
 }
