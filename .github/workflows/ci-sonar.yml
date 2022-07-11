@@ -34,3 +34,4 @@ jobs:
           java-version: 11.0.4
       - name: SonarCloud Scan
         run: mvn -B clean verify -Psonar -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
