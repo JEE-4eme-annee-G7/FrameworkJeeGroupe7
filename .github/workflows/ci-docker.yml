@@ -1,9 +1,9 @@
 name: CI
 on:
   push:
-    branches: [ dev-ci ]
+    branches: [ dev ]
   pull_request:
-    branches: [ dev-ci ]
+    branches: [ dev ]
 jobs:
   test:
     name: Test - Units & Integrations
