@@ -53,8 +53,7 @@ public class SlotValidationServiceTest {
     void should_be_invalid2() {
         try {
             var slot = new Slot();
-            slot.setStartSlot(new Date());
-            slot.setEndSlot(new Date());
+
             slot.setUser(user1);
             System.out.println(slot.getStartSlot());
             System.out.println(slot.getEndSlot());
