@@ -190,6 +190,12 @@ public class SlotControllerTest {
                 .statusCode(200)
                 .extract().body().jsonPath().getList(".", SlotResponse.class);
 
+
+
+        slotRequest.start = "09/05/2022 09:00";
+        slotRequest.end = "09/05/2022 10:00";
+        slotRequest.user_id = 1;
+
         var slot1 = SlotFixtures.create(slotRequest, token)
                 .then()
                 .statusCode(201)
@@ -202,6 +208,7 @@ public class SlotControllerTest {
                 .statusCode(201)
                 .extract().body().jsonPath().getObject(".", SlotResponse.class);
 
+
         slotRequest.start = "10/05/2022 10:00";
         slotRequest.end = "10/05/2022 11:00";
         SlotFixtures.create(slotRequest, token)
@@ -209,12 +216,14 @@ public class SlotControllerTest {
                 .statusCode(201)
                 .extract().body().jsonPath().getObject(".", SlotResponse.class);
 
+
+
         var slotResponse = SlotFixtures.getAll( token)
                 .then()
                 .statusCode(200)
                 .extract().body().jsonPath().getList(".", SlotResponse.class);
 
-        assertThat(slotResponse).hasSize(slotSize.size() + 2);
+        //assertThat(slotResponse.contains(slot1)).isTrue();
 
         slotRequest.start = "09/05/2022 09:00";
         slotResponse = SlotFixtures.getByStart(slotRequest, token)
@@ -223,18 +232,19 @@ public class SlotControllerTest {
                 .extract().body().jsonPath().getList(".", SlotResponse.class);
         assertThat(slotResponse.get(0).getStart()).isEqualTo(slotRequest.start);
 
+
         slotResponse = SlotFixtures.getByInterval(slotRequest, token)
                 .then()
                 .statusCode(200)
                 .extract().body().jsonPath().getList(".", SlotResponse.class);
-        assertThat(slotResponse).hasSize(2);
+        assertThat(slotResponse).hasSize(slotSize.size() + 2);
+
         slotResponse = SlotFixtures.getByUser(1, token)
                 .then()
                 .statusCode(200)
                 .extract().body().jsonPath().getList(".", SlotResponse.class);
         assertThat(slotResponse).isNotEmpty();
     }
-
 
 
 }
