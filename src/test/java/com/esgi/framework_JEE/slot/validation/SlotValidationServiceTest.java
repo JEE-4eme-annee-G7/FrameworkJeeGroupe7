@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
+import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -51,7 +52,13 @@ public class SlotValidationServiceTest {
     @Test
     void should_be_invalid2() {
         try {
-            DateManipulator.stringToDate("");
+            var slot = new Slot();
+            slot.setStartSlot(new Date());
+            slot.setEndSlot(new Date());
+            slot.setUser(user1);
+            System.out.println(slot.getStartSlot());
+            System.out.println(slot.getEndSlot());
+            assertThat(slotValidationService.isValid(slot)).isEqualTo(false);
         }catch (Exception e){
             Assertions.assertTrue(true);
         }
