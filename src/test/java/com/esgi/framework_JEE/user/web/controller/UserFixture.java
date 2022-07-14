@@ -24,7 +24,13 @@ public class UserFixture {
                 .get("/user/" + userId);
     }
 
-
+    public static Response getByEmail(String email, Token token){
+        return given()
+                .contentType(ContentType.JSON)
+                .when()
+                .header("Authorization","Bearer "+token.access_token)
+                .get("/user/email/" + email);
+    }
 
     public static Response changeLastname(int userId, UserRequest userRequest, Token token){
 
