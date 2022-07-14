@@ -16,7 +16,7 @@ public class ProductQuery {
     }
 
     public Product getProduct(int id) {
-        return productRepository.getById(id);
+        return productRepository.findById(id);
     }
 
     public Iterable<Product> getProducts() {
