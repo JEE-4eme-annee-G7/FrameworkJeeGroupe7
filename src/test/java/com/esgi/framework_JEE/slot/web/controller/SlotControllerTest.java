@@ -179,7 +179,7 @@ public class SlotControllerTest {
 
 
     @Test
-    public void should_get_all() {
+    public void should_get_all_and_get_interval() {
         var token = TokenFixture.userToken();
 
         var slotRequest = new SlotRequest();
@@ -199,6 +199,13 @@ public class SlotControllerTest {
                 .statusCode(201)
                 .extract().body().jsonPath().getObject(".", SlotResponse.class);
 
+        slotRequest.start = "10/05/2022 10:00";
+        slotRequest.end = "10/05/2022 11:00";
+        SlotFixtures.create(slotRequest, token)
+                .then()
+                .statusCode(201)
+                .extract().body().jsonPath().getObject(".", SlotResponse.class);
+
         var slotResponse = SlotFixtures.getAll( token)
                 .then()
                 .statusCode(200)
@@ -212,6 +219,17 @@ public class SlotControllerTest {
                 .statusCode(200)
                 .extract().body().jsonPath().getList(".", SlotResponse.class);
         assertThat(slotResponse.get(0).getStart()).isEqualTo(slotRequest.start);
+
+        slotResponse = SlotFixtures.getByInterval(slotRequest, token)
+                .then()
+                .statusCode(200)
+                .extract().body().jsonPath().getList(".", SlotResponse.class);
+        assertThat(slotResponse).hasSize(2);
+        slotResponse = SlotFixtures.getByUser(1, token)
+                .then()
+                .statusCode(200)
+                .extract().body().jsonPath().getList(".", SlotResponse.class);
+        assertThat(slotResponse).isNotEmpty();
     }
 
 
