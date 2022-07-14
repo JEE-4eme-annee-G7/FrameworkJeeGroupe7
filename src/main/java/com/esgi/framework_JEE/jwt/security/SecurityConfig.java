@@ -85,6 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         HttpMethod.POST,
                 "/api/v1/basket/generate/**",
+                        "/api/v1/basket",
                         "/api/v1/invoice",
                         "/api/v1/invoice/generate/**",
                         "/slot/create",
