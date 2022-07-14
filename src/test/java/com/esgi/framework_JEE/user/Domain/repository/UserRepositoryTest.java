@@ -41,10 +41,6 @@ class UserRepositoryTest {
         user3.setLastname("bah");
         user3.setPassword("bahbibel");
     }
-    public void should_find_empty() {
-        var users = userRepository.findAll();
-        assertThat(users).isEmpty();
-    }
 
     @Test
     public void should_find_all_user() {
