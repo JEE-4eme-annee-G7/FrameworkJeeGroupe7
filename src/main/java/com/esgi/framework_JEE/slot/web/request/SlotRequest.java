@@ -5,4 +5,5 @@ import java.util.Date;
 public class SlotRequest {
     public String start;
     public String end;
+    public int user_id;
 }
