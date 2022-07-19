@@ -14,4 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> getProductsByProductCategoryOrPriceOrNutriscoreOrName(
             ProductCategory productCategory, Double price, String nutriscore, String name);
 
+    List<Product> getAllByBasketId(int basket_id);
+
 }

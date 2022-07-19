@@ -19,7 +19,7 @@ public class ApiApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(ApiApplication.class, args);
 	}
-
+/*
 	@Bean
 	CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository){
 		return args -> {
@@ -77,4 +77,6 @@ public class ApiApplication extends SpringBootServletInitializer {
 		user.setEmail(email);
 		return user;
 	}
+
+ */
 }
