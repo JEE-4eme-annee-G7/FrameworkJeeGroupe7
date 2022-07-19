@@ -37,7 +37,7 @@ public class InvoiceControllerTest {
 
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
     }
-
+/*
     @Test
     public void shouldGenerateInvoiceWithUserId(){
         var token = TokenFixture.userToken();
@@ -123,5 +123,5 @@ public class InvoiceControllerTest {
                 .then()
                 .statusCode(200);
     }
-
+*/
 }
