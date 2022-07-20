@@ -71,7 +71,7 @@ public class InvoiceControllerTest {
 
         UserFixture.deleteById(user.getId(), token);
     }
-
+*/
 
 
     @Test
@@ -123,5 +123,5 @@ public class InvoiceControllerTest {
                 .then()
                 .statusCode(200);
     }
-*/
+
 }

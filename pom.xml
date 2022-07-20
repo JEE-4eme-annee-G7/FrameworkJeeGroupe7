@@ -17,21 +17,6 @@
         <java.version>11</java.version>
     </properties>
 
-    <!--
-          dependencyManagement ajouté pour GoogleCLoud
-     -->
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.google.cloud</groupId>
-                <artifactId>spring-cloud-gcp-dependecies</artifactId>
-                <version>2.0.0-RC2</version>
-                <type>POM</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
 
     <dependencies>
         <dependency>
@@ -101,25 +86,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.google.cloud.sql</groupId>
-            <artifactId>postgres-socket-factory</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-
-        <!--
-           ajouté pour GoogleCLoud
-           -->
-        <dependency>
-            <groupId>com.google.cloud</groupId>
-            <artifactId>spring-cloud-gcp-starter-sql-postgresql</artifactId>
-            <version>3.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.cloud.sql</groupId>
-            <artifactId>postgres-socket-factory</artifactId>
-            <version>1.6.0</version>
-        </dependency>
 
     </dependencies>
 
@@ -185,22 +151,6 @@
                     <target>11</target>
                 </configuration>
             </plugin>
-
-			<!--
-                    ajouté pour GoogleCLoud
-             -->
-			<plugin>
-				<groupId>com.google.cloud.tools</groupId>
-				<artifactId>appengine-maven-plugin</artifactId>
-				<version>2.2.0</version>
-				<configuration>
-					<version>1</version>
-					<projectId>framework-jee-4eme-annee</projectId>
-				</configuration>
-			</plugin>
-
-
-
         </plugins>
     </build>
 
