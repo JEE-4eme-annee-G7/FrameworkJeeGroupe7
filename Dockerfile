@@ -1,3 +1,8 @@
+ARG DB_URL
+ARG DB_USERNAME
+ARG DB_PASSWORK
+ARG TEST
+RUN echo "lE PTIT TEST QUI VA JE LESPERE FONCTIONNER ! : $TEST !"
 FROM maven:3.6.3-jdk-11-slim AS build
 RUN mkdir -p /workspace
 WORKDIR /workspace
