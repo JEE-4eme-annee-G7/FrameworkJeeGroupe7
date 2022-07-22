@@ -12,9 +12,9 @@ RUN echo "lE PTIT TEST QUI VA JE LESPERE FONCTIONNER ! : $TEST !"
 RUN --mount=type=secret,id=DB_URL \
     --mount=type=secret,id=DB_USERNAME \
     --mount=type=secret,id=DB_PASSWORD  \
-    export DB_URL=$(cat /run/secrets/DB_URL) && \
-    export DB_USERNAME=$(cat /run/secrets/DB_USERNAME) && \
-    export DB_PASSWORD=$(cat /run/secrets/DB_PASSWORD)
+    export DB_URL_VAR=$(cat /run/secrets/DB_URL) && \
+    export DB_USERNAME_VAR=$(cat /run/secrets/DB_USERNAME) && \
+    export DB_PASSWORD_VAR=$(cat /run/secrets/DB_PASSWORD)
 RUN mkdir -p /workspace
 WORKDIR /workspace
 COPY pom.xml /workspace
