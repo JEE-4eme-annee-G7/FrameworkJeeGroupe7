@@ -37,6 +37,6 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
+          build-args: TEST= ${{ secrets.COUCOU }}, DB_URL=${{ secrets.DB_URL }}, DB_PASSWORD=${{ secrets.DB_PASSWORD }}, DB_USERNAME=${{ secrets.DB_USERNAME }}
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/framework_jee:latest
-          build-args: TEST= ${{ secrets.COUCOU }}, DB_URL=${{ secrets.DB_URL }}, DB_PASSWORD=${{ secrets.DB_PASSWORD }}, DB_USERNAME=${{ secrets.DB_USERNAME }}
