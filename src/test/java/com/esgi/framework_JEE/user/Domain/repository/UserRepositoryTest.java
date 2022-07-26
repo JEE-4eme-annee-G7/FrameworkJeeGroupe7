@@ -52,6 +52,7 @@ class UserRepositoryTest {
         entityManager.persist(user3);
 
         var users = userRepository.findAll();
+
         assertThat(users).hasSize(findAllBefore.size() + 3).contains(user1, user2, user3);
     }
 
@@ -72,6 +73,7 @@ class UserRepositoryTest {
         entityManager.persist(user3);
         userRepository.deleteById(user2.getId());
         var users = userRepository.findAll();
+
         assertThat(users).hasSize(allUserBefore.size() + 2).contains(user1, user3);
     }
 

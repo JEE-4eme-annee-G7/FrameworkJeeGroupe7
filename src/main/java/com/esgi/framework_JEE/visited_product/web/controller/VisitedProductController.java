@@ -8,8 +8,11 @@ import com.esgi.framework_JEE.user.query.UserQuery;
 import com.esgi.framework_JEE.visited_product.domain.entities.VisitedProduct;
 import com.esgi.framework_JEE.visited_product.web.query.VisitedProductQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -50,7 +53,7 @@ public class VisitedProductController {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(visitedProductCommand.saveVisitedProduct(product, user));
+        return new ResponseEntity (visitedProductCommand.saveVisitedProduct(product, user), HttpStatus.CREATED);
     }
 
     /**
@@ -59,8 +62,8 @@ public class VisitedProductController {
      */
     @GetMapping("/visited")
     @ResponseBody
-    public Iterable<VisitedProduct> getAllVisitedProducts() {
-        return visitedProductQuery.getVisitedProducts();
+    public ResponseEntity<List<VisitedProduct>> getAllVisitedProducts(@RequestBody int user_id) {
+        return new ResponseEntity<>(visitedProductQuery.getVisitedProducts(user_id), HttpStatus.OK) ;
     }
 
 }

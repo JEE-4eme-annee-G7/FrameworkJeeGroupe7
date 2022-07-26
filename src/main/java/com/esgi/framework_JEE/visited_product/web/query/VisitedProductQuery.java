@@ -5,6 +5,9 @@ import com.esgi.framework_JEE.visited_product.domain.entities.VisitedProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class VisitedProductQuery {
 
@@ -14,8 +17,11 @@ public class VisitedProductQuery {
         this.visitedProductRepository = visitedProductRepository;
     }
 
-    public Iterable<VisitedProduct> getVisitedProducts() {
-        return visitedProductRepository.findAll();
+    public List<VisitedProduct> getVisitedProducts(int userId) {
+        return visitedProductRepository.findAll()
+                .stream()
+                .filter(vp -> vp.getUser().getId() == userId)
+                .collect(Collectors.toList());
     }
 
 }

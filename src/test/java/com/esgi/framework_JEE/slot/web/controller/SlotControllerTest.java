@@ -209,6 +209,7 @@ public class SlotControllerTest {
                 .extract().body().jsonPath().getObject(".", SlotResponse.class);
 
 
+
         slotRequest.start = "10/05/2022 10:00";
         slotRequest.end = "10/05/2022 11:00";
         SlotFixtures.create(slotRequest, token)

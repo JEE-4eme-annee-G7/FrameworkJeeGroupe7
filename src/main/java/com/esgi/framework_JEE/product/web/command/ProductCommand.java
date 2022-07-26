@@ -62,7 +62,8 @@ public class ProductCommand {
             if(nutriscore != null){
                 product.setNutriscore(nutriscore);
             }
-            return this.saveProduct(product);
+            //return this.saveProduct(product);
+            return productToUpdate;
         }
         return null;
     }
@@ -72,6 +73,7 @@ public class ProductCommand {
         productToDelete.ifPresent(
             product -> productRepository.deleteById(product.getId())
         );*/
+
         productRepository.deleteById(id);
     }
 }

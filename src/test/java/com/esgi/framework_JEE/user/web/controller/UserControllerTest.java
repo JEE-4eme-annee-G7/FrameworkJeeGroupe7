@@ -3,6 +3,7 @@ package com.esgi.framework_JEE.user.web.controller;
 import com.esgi.framework_JEE.TestFixtures;
 import com.esgi.framework_JEE.Token;
 import com.esgi.framework_JEE.TokenFixture;
+import com.esgi.framework_JEE.user.Domain.entities.User;
 import com.esgi.framework_JEE.user.web.request.UserRequest;
 import com.esgi.framework_JEE.user.web.response.UserResponse;
 import io.restassured.RestAssured;
@@ -210,8 +211,6 @@ class UserControllerTest {
         assertThat(response3).isEqualTo("");
 
     }
-
-
 
     @Test
     public void should_test_get_by_email(){
