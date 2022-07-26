@@ -18,26 +18,26 @@ jobs:
         run: mvn -B clean package -DskipTests
       - name: Maven Verify
         run: mvn -B clean verify -Pintegration-test
-#  docker:
-#    name: Build - Docker
-#    runs-on: ubuntu-18.04
-#    needs: [  test ]
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#      - name: Login to Docker Hub
-#        uses: docker/login-action@v1
-#        with:
-#          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-#          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-#      - name: Set up Docker Build
-#        uses: docker/setup-buildx-action@v1
-#      - name: Build and push
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: .
-#          file: ./Dockerfile
-#          push: true
-#          env: ${{ secrets.DATABASE_URL }}, ${{ secrets.DATABASE_PASSWORD }}, ${{ secrets.DATABASE_USERNAME }}
-#          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/framework_jee:latest
-#          build-args: TEST=COUCOU, DB_URL=${{ secrets.DB_URL }}, DB_PASSWORD=${{ secrets.DB_PASSWORD }}, DB_USERNAME=${{ secrets.DB_USERNAME }}#
+  docker:
+    name: Build - Docker
+    runs-on: ubuntu-18.04
+    needs: [  test ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Set up Docker Build
+        uses: docker/setup-buildx-action@v1
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          env: ${{ secrets.DATABASE_URL }}, ${{ secrets.DATABASE_PASSWORD }}, ${{ secrets.DATABASE_USERNAME }}
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/framework_jee:latest
+          build-args: TEST=COUCOU, DB_URL=${{ secrets.DB_URL }}, DB_PASSWORD=${{ secrets.DB_PASSWORD }}, DB_USERNAME=${{ secrets.DB_USERNAME }}#
