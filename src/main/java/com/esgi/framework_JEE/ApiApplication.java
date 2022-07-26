@@ -44,8 +44,6 @@ public class ApiApplication extends SpringBootServletInitializer {
 			if (saved_user1 == null)
 				saved_user1 = userRepository.save(createUser("Lucas","Jehanno","lucas@hotmail.fr","azerty1234"));
 
-
-
 			var saved_user2 = userRepository.findByEmail("test@test.fr");
 			if (saved_user2 == null)
 				saved_user2 = userRepository.save(createUser("Test","Test","test@test.fr","test1234test"));
