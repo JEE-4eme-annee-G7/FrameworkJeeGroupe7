@@ -1,4 +1,3 @@
-
 FROM maven:3.6.3-jdk-11-slim AS build
 ARG DB_URL
 ARG DB_USERNAME
