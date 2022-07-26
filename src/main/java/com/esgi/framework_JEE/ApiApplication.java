@@ -40,10 +40,10 @@ public class ApiApplication extends SpringBootServletInitializer {
 			System.out.println(role_ADMIN.getTitlePermission());
 			System.out.println("----------------------------");
 
-
 			var saved_user1 = userRepository.findByEmail("lucas@hotmail.fr");
 			if (saved_user1 == null)
 				saved_user1 = userRepository.save(createUser("Lucas","Jehanno","lucas@hotmail.fr","azerty1234"));
+
 
 
 			var saved_user2 = userRepository.findByEmail("test@test.fr");

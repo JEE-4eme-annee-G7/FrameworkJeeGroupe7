@@ -19,7 +19,7 @@ public class Invoice {
     @Column(name = "amount")
     private Double amount;
 
-    @Column(name = "creationDate")
+    @Column(name = "creation_date")
     private Date creationDate;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
