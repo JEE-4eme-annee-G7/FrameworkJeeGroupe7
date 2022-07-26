@@ -62,7 +62,6 @@ public class UserController {
         );
     }
 
-
     @GetMapping(value = "/", produces = { MimeTypeUtils.APPLICATION_JSON_VALUE }, headers = "Accept=application/json")
     public ResponseEntity<List<UserResponse>> getUserAll(){
         return new ResponseEntity<>(

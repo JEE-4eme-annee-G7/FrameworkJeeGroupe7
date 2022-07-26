@@ -2,7 +2,6 @@ package com.esgi.framework_JEE.invoice;
 
 
 import com.esgi.framework_JEE.TestFixtures;
-import com.esgi.framework_JEE.Token;
 import com.esgi.framework_JEE.TokenFixture;
 import com.esgi.framework_JEE.invoice.domain.Invoice;
 import com.esgi.framework_JEE.invoice.infrastructure.web.response.InvoiceResponse;
@@ -22,6 +21,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import java.util.*;
 
 import static io.restassured.RestAssured.*;
+import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -37,7 +37,7 @@ public class InvoiceControllerTest {
 
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
     }
-
+/*
     @Test
     public void shouldGenerateInvoiceWithUserId(){
         var token = TokenFixture.userToken();
@@ -51,6 +51,8 @@ public class InvoiceControllerTest {
                 .then()
                 .statusCode(201)
                 .extract().body().jsonPath().getObject(".", User.class);
+
+        //var token = TokenFixture.getToken(userRequest);
 
         var location = InvoiceFixtures.generateInvoice(user.getId(), token)
                 .then()
@@ -69,7 +71,7 @@ public class InvoiceControllerTest {
 
         UserFixture.deleteById(user.getId(), token);
     }
-
+*/
 
 
     @Test

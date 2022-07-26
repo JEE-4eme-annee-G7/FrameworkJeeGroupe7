@@ -72,4 +72,6 @@ public class RoleFixture {
         request.name = role.getTitlePermission();
         return request;
     }
+
 }
+

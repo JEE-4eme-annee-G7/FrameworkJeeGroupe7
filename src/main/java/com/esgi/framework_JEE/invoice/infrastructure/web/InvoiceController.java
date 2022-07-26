@@ -40,6 +40,7 @@ public class InvoiceController {
         ).build();
     }
 
+    /*
     @PostMapping("/generate/{user_id}")
     public ResponseEntity<?> generateInvoice(@PathVariable int user_id){
         var user = userQuery.getById(user_id);
@@ -55,7 +56,7 @@ public class InvoiceController {
                 ).toUri()
         ).build();
     }
-
+     */
 
     @GetMapping("/{id}")
     public ResponseEntity<InvoiceResponse> getById(@PathVariable @NotNull int id){
@@ -75,7 +76,7 @@ public class InvoiceController {
             return new ResponseEntity<>(" User not found", HttpStatus.NOT_FOUND);
         }
 
-        var invoiceResponses = invoiceService.getByUserId(user);
+        var invoiceResponses = invoiceService.getByUser(user);
         if(invoiceResponses.isEmpty()){
             return new ResponseEntity<>("Not Invoice found for this user", HttpStatus.NOT_FOUND);
         }
@@ -110,10 +111,26 @@ public class InvoiceController {
         // 1 - Chercher tous les produits de la factures (getAllProductByInvoiceId)
         // 2 - Supprimer l'id de la facture dans les produits
 
-        invoiceService.delete(id);
+        invoiceService.deleteById(id);
 
         return new ResponseEntity<>("Invoice deleted", HttpStatus.OK);
     }
+
+
+    @DeleteMapping("/userId/{user_id}")
+    public ResponseEntity<String> deleteByUserId(@PathVariable int user_id){
+        var user = userQuery.getById(user_id);
+        if(user == null) return new ResponseEntity<>(" User not found", HttpStatus.NOT_FOUND);
+
+        var userInvoice = invoiceService.getByUser(user);
+        if (userInvoice.isEmpty()) return new ResponseEntity<>(user.getFirstname() + " don't have any invoice", HttpStatus.NOT_FOUND);
+
+        invoiceService.deleteByUser(user);
+
+        return new ResponseEntity<>("Invoices deleted", HttpStatus.OK);
+    }
+
+
 
 
     private InvoiceResponse toResponse(Invoice invoice){

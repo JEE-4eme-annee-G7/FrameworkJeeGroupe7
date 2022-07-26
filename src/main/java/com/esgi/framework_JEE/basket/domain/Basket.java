@@ -19,6 +19,8 @@ public class Basket {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private Double amount;
+
     public int getId() {
         return id;
     }
@@ -34,6 +36,15 @@ public class Basket {
 
     public Basket setUser(User user) {
         this.user = user;
+        return this;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public Basket setAmount(Double amount) {
+        this.amount = amount;
         return this;
     }
 }

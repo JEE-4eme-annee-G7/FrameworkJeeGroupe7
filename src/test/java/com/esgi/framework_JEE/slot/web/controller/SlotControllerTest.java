@@ -1,9 +1,11 @@
 package com.esgi.framework_JEE.slot.web.controller;
 
+import com.esgi.framework_JEE.TestFixtures;
 import com.esgi.framework_JEE.TokenFixture;
 import com.esgi.framework_JEE.kernel.date.DateManipulator;
 import com.esgi.framework_JEE.slot.web.request.SlotRequest;
 import com.esgi.framework_JEE.slot.web.response.SlotResponse;
+import com.esgi.framework_JEE.user.web.request.UserRequest;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -21,12 +23,17 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 public class SlotControllerTest {
     @LocalServerPort
     int port;
+    public UserRequest user1 = new UserRequest();
 
     @BeforeEach
     void setup(){
         RestAssured.port = port;
 
         RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+        user1.email= TestFixtures.randomEmail();
+        user1.firstname = "lucas";
+        user1.lastname = "jehanno";
+        user1.password = "securite !";
     }
 
 
@@ -38,7 +45,7 @@ public class SlotControllerTest {
         var slotRequest = new SlotRequest();
         slotRequest.start = "09/05/2022 09:00";
         slotRequest.end = "09/05/2022 10:00";
-
+        slotRequest.user_id = 1;
         /*
          * create
          */
@@ -150,6 +157,7 @@ public class SlotControllerTest {
         var slotRequest = new SlotRequest();
         slotRequest.start = "09/05/2022 11:00";
         slotRequest.end = "09/05/2022 10:00";
+        slotRequest.user_id = 1;
 
         var slotResponse = SlotFixtures.create(slotRequest, token)
                 .then()
@@ -171,12 +179,22 @@ public class SlotControllerTest {
 
 
     @Test
-    public void should_get_all() {
+    public void should_get_all_and_get_interval() {
         var token = TokenFixture.userToken();
 
         var slotRequest = new SlotRequest();
         slotRequest.start = "09/05/2022 09:00";
+        slotRequest.end = "10/05/2022 11:00";
+        var slotSize =  SlotFixtures.getByInterval(slotRequest, token)
+                .then()
+                .statusCode(200)
+                .extract().body().jsonPath().getList(".", SlotResponse.class);
+
+
+
+        slotRequest.start = "09/05/2022 09:00";
         slotRequest.end = "09/05/2022 10:00";
+        slotRequest.user_id = 1;
 
         var slot1 = SlotFixtures.create(slotRequest, token)
                 .then()
@@ -189,6 +207,17 @@ public class SlotControllerTest {
                 .then()
                 .statusCode(201)
                 .extract().body().jsonPath().getObject(".", SlotResponse.class);
+
+
+
+        slotRequest.start = "10/05/2022 10:00";
+        slotRequest.end = "10/05/2022 11:00";
+        SlotFixtures.create(slotRequest, token)
+                .then()
+                .statusCode(201)
+                .extract().body().jsonPath().getObject(".", SlotResponse.class);
+
+
 
         var slotResponse = SlotFixtures.getAll( token)
                 .then()
@@ -203,8 +232,20 @@ public class SlotControllerTest {
                 .statusCode(200)
                 .extract().body().jsonPath().getList(".", SlotResponse.class);
         assertThat(slotResponse.get(0).getStart()).isEqualTo(slotRequest.start);
-    }
 
+
+        slotResponse = SlotFixtures.getByInterval(slotRequest, token)
+                .then()
+                .statusCode(200)
+                .extract().body().jsonPath().getList(".", SlotResponse.class);
+        assertThat(slotResponse).hasSize(slotSize.size() + 2);
+
+        slotResponse = SlotFixtures.getByUser(1, token)
+                .then()
+                .statusCode(200)
+                .extract().body().jsonPath().getList(".", SlotResponse.class);
+        assertThat(slotResponse).isNotEmpty();
+    }
 
 
 }

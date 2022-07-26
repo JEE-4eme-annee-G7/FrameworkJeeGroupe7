@@ -6,9 +6,11 @@ import com.esgi.framework_JEE.product.web.services.Levenshtein;
 import com.esgi.framework_JEE.product_category.domain.entities.ProductCategory;
 import org.springframework.stereotype.Service;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 public class ProductQuery {
@@ -22,7 +24,7 @@ public class ProductQuery {
     }
 
     public Product getProduct(int id) {
-        return productRepository.getById(id);
+        return productRepository.findById(id);
     }
 
     public List<Product> getProducts() {
@@ -42,5 +44,9 @@ public class ProductQuery {
                 || (nutriscore != null && product.getNutriscore() == nutriscore)).collect(Collectors.toList());
 
         return foundProducts;
+    }
+
+    public List<Product> getProductsByBasketId(int basket_id){
+        return productRepository.getAllByBasketId(basket_id);
     }
 }

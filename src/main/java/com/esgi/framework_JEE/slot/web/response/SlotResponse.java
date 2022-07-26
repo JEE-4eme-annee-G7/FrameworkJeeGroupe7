@@ -1,9 +1,12 @@
 package com.esgi.framework_JEE.slot.web.response;
 
+import com.esgi.framework_JEE.user.Domain.entities.User;
+
 public class SlotResponse {
     public int id;
     public String start;
     public String end;
+    public User user;
 
     public SlotResponse() {
     }
@@ -32,6 +35,13 @@ public class SlotResponse {
 
     public SlotResponse setEnd(String end) {
         this.end = end;
+        return this;
+    }
+    public User getUser() {
+        return user;
+    }
+    public SlotResponse setUser(User user) {
+        this.user = user;
         return this;
     }
 }

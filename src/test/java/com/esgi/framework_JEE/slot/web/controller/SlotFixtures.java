@@ -35,6 +35,22 @@ public class SlotFixtures {
                 .get("/slot/" + slotId);
     }
 
+    public static Response getByUser(int userId, Token token){
+        return given()
+                .contentType(ContentType.JSON)
+                .when()
+                .header("Authorization","Bearer "+token.access_token)
+                .get("/slot/user/" + userId);
+    }
+    public static Response getByInterval(SlotRequest slotRequest, Token token){
+        return given()
+                .contentType(ContentType.JSON)
+                .when()
+                .header("Authorization","Bearer "+token.access_token)
+                .body(slotRequest)
+                .get("/slot/interval");
+    }
+
     public static Response getAll(Token token){
         return given()
                 .contentType(ContentType.JSON)

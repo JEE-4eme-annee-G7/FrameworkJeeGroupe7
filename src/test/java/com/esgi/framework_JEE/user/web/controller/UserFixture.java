@@ -32,8 +32,6 @@ public class UserFixture {
                 .get("/user/email/" + email);
     }
 
-
-
     public static Response changeLastname(int userId, UserRequest userRequest, Token token){
 
         return given()

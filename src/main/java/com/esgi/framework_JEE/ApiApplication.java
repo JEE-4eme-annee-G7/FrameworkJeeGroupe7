@@ -23,8 +23,14 @@ public class ApiApplication extends SpringBootServletInitializer {
 	@Bean
 	CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository){
 		return args -> {
-			var role_USER = roleRepository.save(createRole("USER"));
-			var role_ADMIN = roleRepository.save(createRole("ADMIN"));
+			var role_USER = roleRepository.findRoleByTitlePermission("USER");
+			if(role_USER == null)
+				role_USER = roleRepository.save(createRole("USER"));
+
+
+			var role_ADMIN = roleRepository.findRoleByTitlePermission("ADMIN");
+			if (role_ADMIN == null)
+				role_ADMIN = roleRepository.save(createRole("ADMIN"));
 
 
 			System.out.println("----------------------------");
@@ -34,14 +40,25 @@ public class ApiApplication extends SpringBootServletInitializer {
 			System.out.println(role_ADMIN.getTitlePermission());
 			System.out.println("----------------------------");
 
-			var saved_user1 = userRepository.save(createUser("Lucas","Jehanno","lucas@hotmail.fr","azerty1234"));
-			var saved_user2 = userRepository.save(createUser("Test","Test","test@test.fr","test1234test"));
+
+			var saved_user1 = userRepository.findByEmail("lucas@hotmail.fr");
+			if (saved_user1 == null)
+				saved_user1 = userRepository.save(createUser("Lucas","Jehanno","lucas@hotmail.fr","azerty1234"));
 
 
-			saved_user1.setPermission(role_ADMIN);
-			saved_user2.setPermission(role_USER);
-			userRepository.save(saved_user1);
-			userRepository.save(saved_user2);
+			var saved_user2 = userRepository.findByEmail("test@test.fr");
+			if (saved_user2 == null)
+				saved_user2 = userRepository.save(createUser("Test","Test","test@test.fr","test1234test"));
+
+			if (saved_user1.getPermission() == null){
+				saved_user1.setPermission(role_ADMIN);
+				userRepository.save(saved_user1);
+			}
+			if (saved_user2.getPermission() == null){
+				saved_user2.setPermission(role_USER);
+				userRepository.save(saved_user2);
+			}
+
 
 
 
@@ -77,4 +94,6 @@ public class ApiApplication extends SpringBootServletInitializer {
 		user.setEmail(email);
 		return user;
 	}
+
+ 
 }

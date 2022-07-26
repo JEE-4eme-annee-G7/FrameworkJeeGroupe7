@@ -14,4 +14,13 @@ public class DateManipulator {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return simpleDateFormat.format(date);
     }
+
+    public static Date reformatDate(Date date) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return simpleDateFormat.parse(
+                simpleDateFormat.format(
+                        date
+                )
+        );
+    }
 }

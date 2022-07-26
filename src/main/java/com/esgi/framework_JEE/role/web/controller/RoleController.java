@@ -57,8 +57,8 @@ public class RoleController {
     }
 
     @GetMapping("/name/{roleName}")
-    public ResponseEntity<List<RoleResponse>> getRoleByName(@PathVariable String roleName){
-        return new ResponseEntity<>(listRoleToListRoleResponse(
+    public ResponseEntity<RoleResponse> getRoleByName(@PathVariable String roleName){
+        return new ResponseEntity<>(roleToRoleResponse(
                 roleQuery.getByName(roleName)),
                 HttpStatus.OK
         );

@@ -46,14 +46,16 @@ public class BasketControllerTest {
 
     @Test
     public void shouldGenerateBasketWithUserId(){
+
         var user = UserFixture.create(userRequest)
                 .then()
                 .statusCode(201)
                 .extract().body().jsonPath().getObject(".", User.class);
 
+
         var token = TokenFixture.getToken(userRequest);
 
-        var location = BasketFixtures.generateInvoice(user.getId(),token)
+        var location = BasketFixtures.generateInvoice(user.getId(), token)
                 .then()
                 .statusCode(201)
                 .extract().header("Location");
@@ -78,7 +80,6 @@ public class BasketControllerTest {
 
         userRequest.email = TestFixtures.randomEmail();
         userRequest.password = "mot de passe";
-
         var token = TokenFixture.userToken();
         var locationBasketCreated = BasketFixtures.create(token)
                 .then()
@@ -99,6 +100,7 @@ public class BasketControllerTest {
                 .delete(locationBasketCreated)
                 .then()
                 .statusCode(200);
+
     }
 
     @Test
@@ -110,9 +112,8 @@ public class BasketControllerTest {
                 .then()
                 .statusCode(201)
                 .extract().body().jsonPath().getObject(".", User.class);
-
-
         var token = TokenFixture.getToken(userRequest);
+
         given()
                 .header("Authorization","Bearer "+token.access_token)
                 .given()
@@ -131,9 +132,4 @@ public class BasketControllerTest {
                 .then()
                 .statusCode(403);
     }
-
-
-
-
-
 }

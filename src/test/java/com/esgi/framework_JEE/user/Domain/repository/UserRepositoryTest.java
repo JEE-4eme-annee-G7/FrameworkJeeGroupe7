@@ -41,22 +41,10 @@ class UserRepositoryTest {
         user3.setLastname("bah");
         user3.setPassword("bahbibel");
     }
-    @Test
-    public void should_find_not_empty() {
-        var users = userRepository.findAll();
-        assertThat(users).isNotEmpty();
-    }
-
-
-    @Test
-    public void should_find_2_user() {
-        var users = userRepository.findAll();
-        assertThat(users).size().isEqualTo(2);
-    }
 
     @Test
     public void should_find_all_user() {
-
+        var findAllBefore = userRepository.findAll();
         entityManager.persist(user1);
 
         entityManager.persist(user2);
@@ -64,7 +52,8 @@ class UserRepositoryTest {
         entityManager.persist(user3);
 
         var users = userRepository.findAll();
-        assertThat(users).hasSize(5).contains(user1, user2, user3);
+
+        assertThat(users).hasSize(findAllBefore.size() + 3).contains(user1, user2, user3);
     }
 
 
@@ -78,13 +67,14 @@ class UserRepositoryTest {
 
     @Test
     public void should_delete_User_by_id() {
-
+        var allUserBefore = userRepository.findAll();
         entityManager.persist(user1);
         entityManager.persist(user2);
         entityManager.persist(user3);
         userRepository.deleteById(user2.getId());
         var users = userRepository.findAll();
-        assertThat(users).hasSize(4).contains(user1, user3);
+
+        assertThat(users).hasSize(allUserBefore.size() + 2).contains(user1, user3);
     }
 
 
