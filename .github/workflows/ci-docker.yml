@@ -1,9 +1,9 @@
-name: CI
+name: CI-DEV
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
   pull_request:
-    branches: [ main ]
+    branches: [ dev ]
 jobs:
   test:
     name: Test - Units & Integrations
@@ -40,3 +40,4 @@ jobs:
           push: true
           env: ${{ secrets.DATABASE_URL }}, ${{ secrets.DATABASE_PASSWORD }}, ${{ secrets.DATABASE_USERNAME }}
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/framework_jee:latest
+          build-args: TEST=COUCOU, DB_URL=${{ secrets.DB_URL }}, DB_PASSWORD=${{ secrets.DB_PASSWORD }}, DB_USERNAME=${{ secrets.DB_USERNAME }}
