@@ -1,5 +1,6 @@
 package com.esgi.framework_JEE.role.web.controller;
 
+import com.esgi.framework_JEE.TestFixtures;
 import com.esgi.framework_JEE.TokenFixture;
 import com.esgi.framework_JEE.role.web.response.RoleResponse;
 import com.esgi.framework_JEE.role.web.resquest.RoleRequest;
@@ -73,7 +74,7 @@ class RoleControllerTest {
     @Test
     void getRoleByName() {
         var request = new RoleRequest();
-        request.name = "name";
+        request.name = TestFixtures.randomEmail();
         var token = TokenFixture.adminToken();
         RoleFixture.create(request,token).then()
                 .statusCode(200);
