@@ -1,7 +1,6 @@
 package com.esgi.framework_JEE.visited_product;
 
 import com.esgi.framework_JEE.Token;
-import com.esgi.framework_JEE.product.web.request.ProductRequest;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
@@ -15,6 +14,15 @@ public class VisitedProductFixture {
                 .body(userId)
                 .header("Authorization","Bearer "+token.access_token)
                 .post("/products/" + productId + "/visited/");
+    }
+
+    public static Response getAllVisitedProducts(int userId, Token token){
+        return given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(userId)
+                .header("Authorization","Bearer "+token.access_token)
+                .post("/products/visited");
     }
 
 }
