@@ -61,10 +61,6 @@ public class UserController {
                 HttpStatus.OK
         );
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> 599499f (:white_check_mark: :art: add get user by email with tests)
 
     @GetMapping(value = "/", produces = { MimeTypeUtils.APPLICATION_JSON_VALUE }, headers = "Accept=application/json")
     public ResponseEntity<List<UserResponse>> getUserAll(){
